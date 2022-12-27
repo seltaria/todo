@@ -1,0 +1,234 @@
+@import url('https://fonts.cdnfonts.com/css/josefin-sans');
+
+:root {
+
+  /*Colors*/
+  /*Primary*/
+  --bright-blue: hsl(220, 98%, 61%);
+  --check-background-start: hsl(192, 100%, 67%);
+  --check-background-end: hsl(280, 87%, 65%);
+  /*Neutral*/
+  /*Light Theme*/
+  --very-light-gray: hsl(0, 0%, 98%);
+  --very-light-grayish-blue: hsl(236, 33%, 92%);
+  --light-grayish-blue-1: hsl(233, 11%, 84%);
+  --dark-grayish-blue-1: hsl(236, 9%, 61%);
+  --very-dark-grayish-blue-1: hsl(235, 19%, 35%);
+  /*Dark Theme*/
+  --very-dark-blue: hsl(235, 21%, 11%);
+  --very-dark-desaturated-blue: hsl(235, 24%, 19%);
+  --light-grayish-blue-2: hsl(234, 39%, 85%);
+  --light-grayish-blue-hover: hsl(236, 33%, 92%);
+  --dark-grayish-blue-2: hsl(234, 11%, 52%);
+  --very-dark-grayish-blue-2: hsl(233, 14%, 35%);
+  --very-dark-grayish-blue-3: hsl(237, 14%, 26%);
+
+  --font-size: 16px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  color: var(--light-grayish-blue-2);
+  background-color: var(--very-dark-blue);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-normal);
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+button,
+input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 0;
+  cursor: pointer;
+}
+
+/* APP */
+
+.app {
+  margin: 0 auto;
+  padding-top: 100px;
+  max-width: 600px;
+}
+
+.app__title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  letter-spacing: 10px;
+  color: white;
+}
+
+.bg {
+  position: absolute;
+  height: 300px;
+  width: 100%;
+  background-image: url("./images/bg-desktop-dark.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}
+
+/* TODO */
+
+.todo__new {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #25273C;
+  border-radius: 5px;
+}
+
+.todo__new input {
+  width: 100%;
+  color: var(--light-grayish-blue-2)
+}
+
+.todo__new input::placeholder {
+  color: var(--very-dark-grayish-blue-2);
+}
+
+.todo__list {
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+}
+
+.todo__item {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #25273C;
+  border-bottom: 1px solid var(--very-dark-grayish-blue-2);
+}
+
+.todo__check {
+  width: 20px;
+  height: 20px;
+  margin-right: 20px;
+  border: 1px solid var(--dark-grayish-blue-2);
+  border-radius: 50%;
+}
+
+.todo__check.completed {
+  position: relative;
+  background: linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  overflow: hidden;
+}
+
+.todo__check.completed::before {
+  content: '';
+  top: 0;
+  left: 1px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url('./images/icon-check.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.todo__check.completed ~ .todo__text {
+  color: var(--very-dark-grayish-blue-2);
+  text-decoration: line-through;
+}
+
+.todo__delete-item {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  background-image: url('./images/icon-cross.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.todo__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 12px;
+  color: var(--very-dark-grayish-blue-2);
+  background-color: #25273C;
+  border-radius: 0 0 5px 5px;
+}
+
+.todo__footer-filter button,
+.todo__footer-mobile button {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--very-dark-grayish-blue-2);
+  transition: color .2s ease-in-out;
+}
+
+.todo__footer-filter button:hover,
+.todo__footer-mobile button:hover {
+  color: var(--light-grayish-blue-hover);
+}
+
+.todo__clear-completed {
+  color: var(--very-dark-grayish-blue-2);
+  transition: color .2s ease-in-out;
+}
+
+.todo__clear-completed:hover {
+  color: var(--light-grayish-blue-hover);
+}
+
+.todo__footer-filter button.active,
+.todo__footer-mobile button.active {
+  color: hsl(220, 98%, 61%);
+}
+
+
+@media (max-width: 650px) {
+
+ .app {
+  margin-right: 20px;
+  margin-left: 20px;
+ }
+
+}
+
+@media (max-width: 550px) {
+
+  body {
+    font-size: 14px;
+  }
+
+  .bg {
+    height: 200px;
+    background-image: url('./images/bg-mobile-dark.jpg');
+  }
+
+  .todo__footer-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 60px;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
+    background-color: #25273C;
+  }
+
+}
