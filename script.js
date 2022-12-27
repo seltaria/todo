@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemButton = document.createElement('button');
     const itemText = document.createElement('div');
     const deleteItem = document.createElement('button');
-    item.className = 'todo__item';
+    item.className = `todo__item`;
+    if (JSON.parse(localStorage.getItem('mode')) === 'light') { item.classList.add('light') };
     itemButton.className = `todo__check ${todo.completed && 'completed'}`;
     itemText.className = 'todo__text';
     itemText.textContent = todo.text;
@@ -141,20 +142,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
+  function chooseFooter() {
+    const footerContainer = document.querySelector('.todo__footer-mobile');
+    const mainFooterContainer = document.querySelector('.todo__footer-filter');
 
-  const footerContainer = document.querySelector('.todo__footer-mobile');
-  const mainFooterContainer = document.querySelector('.todo__footer-filter');
-
-  if (innerWidth < 550) {
-    addMobileFooter(footerContainer)
-  } else {
-    addMobileFooter(mainFooterContainer)
+    if (innerWidth < 550) {
+      addMobileFooter(footerContainer)
+    } else {
+      addMobileFooter(mainFooterContainer)
+    }
   }
 
+  function changeMode() {
+    const bg = document.querySelector('.bg');
+    const todoFooter = document.querySelector('.todo__footer');
+    const todoFooterMobile = document.querySelector('.todo__footer-mobile');
+    const todoBlock = document.querySelector('.todo');
+    const button = document.querySelector('.change-mode');
+
+    const modeArray = [document.body, bg, todoFooter, todoFooterMobile, todoBlock, button];
+
+    if (JSON.parse(localStorage.getItem('mode')) === 'light') {
+      modeArray.forEach(el => el.classList.toggle('light'));
+    }
+
+    button.addEventListener('click', () => {
+      modeArray.forEach(el => el.classList.toggle('light'));
+
+      localStorage.setItem('mode', JSON.stringify(document.body.classList.value));
+    })
+  }
+
+  chooseFooter();
   addTodos(todoArray);
   createNewTodo();
   clearCompleted();
   filterTodos();
-
+  changeMode();
 
 })

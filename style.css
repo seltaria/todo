@@ -43,6 +43,11 @@ body {
   font-family: 'Josefin Sans', sans-serif;
 }
 
+body.light {
+  color: var(--very-dark-grayish-blue-1);
+  background-color: hsl(0, 0%, 98%);
+}
+
 button,
 input {
   background-color: transparent;
@@ -65,7 +70,7 @@ button {
 
 .app__title {
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   letter-spacing: 10px;
   color: white;
 }
@@ -80,7 +85,35 @@ button {
   z-index: -1;
 }
 
+.bg.light {
+  background-image: url("./images/bg-desktop-light.jpg");
+}
+
+/* MODE */
+
+.app__header {
+  display: flex;
+}
+
+.change-mode {
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  background-image: url('./images/icon-sun.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.change-mode.light {
+  background-image: url('./images/icon-moon.svg');
+}
+
 /* TODO */
+
+.todo {
+  border-radius: 0 0 5px 5px;
+}
 
 .todo__new {
   display: flex;
@@ -91,6 +124,40 @@ button {
   padding-right: 20px;
   background-color: #25273C;
   border-radius: 5px;
+}
+
+.todo.light .todo__new,
+.todo.light .todo__item,
+.todo__footer.light,
+.todo__footer-mobile.light {
+  background-color: hsl(0, 0%, 98%);
+}
+
+.todo.light .todo__item {
+  border-bottom: 1px solid var(--light-grayish-blue-1);
+}
+
+.todo.light .todo__item button:first-child {
+  border: 1px solid var(--light-grayish-blue-1);
+}
+
+.todo.light .todo__item button.completed ~ .todo__text {
+  color: var(--light-grayish-blue-1);
+}
+
+.todo__footer.light,
+.todo__footer.light button,
+.todo.light .todo__new input::placeholder {
+  color: var(--dark-grayish-blue-1);
+}
+
+.todo.light .todo__new input,
+.todo__footer.light button:hover {
+  color: var(--very-dark-grayish-blue-1);
+}
+
+.todo.light {
+  box-shadow: 0px 20px 30px rgba(119, 110, 110, 0.15);
 }
 
 .todo__new input {
@@ -215,8 +282,12 @@ button {
   }
 
   .bg {
-    height: 200px;
+    height: 210px;
     background-image: url('./images/bg-mobile-dark.jpg');
+  }
+
+  .bg.light {
+    background-image: url('./images/bg-mobile-light.jpg');
   }
 
   .todo__footer-mobile {
