@@ -271,6 +271,7 @@ button {
  .app {
   margin-right: 20px;
   margin-left: 20px;
+  padding-bottom: 20px;
  }
 
 }
@@ -282,7 +283,7 @@ button {
   }
 
   .bg {
-    height: 210px;
+    height: 290px;
     background-image: url('./images/bg-mobile-dark.jpg');
   }
 
