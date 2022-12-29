@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearCompleted() {
     const clearButton = document.querySelector('.todo__clear-completed');
     clearButton.addEventListener('click', () => {
-      todoArray.map(el => el.completed = false);
+      todoArray = todoArray.filter(el => el.completed === false);
       localStorage.setItem('todos', JSON.stringify(todoArray));
       addTodos(todoArray);
     })
