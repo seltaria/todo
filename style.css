@@ -65,6 +65,7 @@ button {
 .app {
   margin: 0 auto;
   padding-top: 100px;
+  padding-bottom: 20px;
   max-width: 600px;
 }
 
@@ -182,6 +183,16 @@ button {
   padding-right: 20px;
   background-color: #25273C;
   border-bottom: 1px solid var(--very-dark-grayish-blue-2);
+}
+
+.todo__item.selected {
+  background-color: rgba(56, 50, 61, 0.484);
+  opacity: 0.6;
+}
+
+.todo.light .todo__item.selected {
+  background: linear-gradient(90deg, hsla(192, 100%, 67%, 0.585), hsla(280, 87%, 65%, 0.442));
+  opacity: 0.6;
 }
 
 .todo__check {

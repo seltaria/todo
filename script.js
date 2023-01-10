@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemText = document.createElement('div');
     const deleteItem = document.createElement('button');
     item.className = `todo__item`;
+    item.draggable = true;
     if (JSON.parse(localStorage.getItem('mode')) === 'light') { item.classList.add('light') };
     itemButton.className = `todo__check ${todo.completed && 'completed'}`;
     itemText.className = 'todo__text';
@@ -173,11 +174,62 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  function dragNDrop() {
+    const todoList = document.querySelector('.todo__list');
+
+    todoList.addEventListener('dragstart', (event) => {
+      event.target.classList.add('selected');
+    })
+
+    todoList.addEventListener('dragend', (event) => {
+      event.target.classList.remove('selected');
+    })
+
+    const getNextTodo = (cursorPosition, currentTodo) => {
+      const currentTodoCoord = currentTodo.getBoundingClientRect();
+      const currentTodoCenter = currentTodoCoord.y + currentTodoCoord.height / 2;
+      const nextTodo = (cursorPosition < currentTodoCenter) ? currentTodo : currentTodo.nextElementSibling;
+      return nextTodo;
+    }
+
+    todoList.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      /* Перемещаемое дело: */
+      const movableTodo = todoList.querySelector('.selected');
+      /* Над каким делом курсор: */
+      const currentTodo = event.target;
+      /* Если событие сработало не на перемещаемом деле и на элементе списка дел: */
+      const isMovable = movableTodo !== currentTodo && currentTodo.classList.contains('todo__item');
+      if (!isMovable) { return }
+      /* Дело, перед которым будет вставлено перемещенное дело: */
+      const nextTodo = getNextTodo(event.clientY, currentTodo);
+      if (nextTodo && movableTodo === nextTodo.previousElementSibling || movableTodo === nextTodo) {
+        return
+      }
+      /* Вставить перемещаемое дело перед найденным сиблингом: */
+      todoList.insertBefore(movableTodo, nextTodo);
+
+      /* Помещаю в локальное хранилище дела с измененным порядком: */
+      const elContentArray = Array.from(todoList.querySelectorAll('.todo__text')).map(el => el.innerHTML);
+      const elStatusArray = Array.from(event.target.parentNode.children).map(el => el.innerHTML.includes('completed'));
+      const draggedArray = [];
+      for (let i = 0; i < elContentArray.length; i++) {
+        draggedArray.push({
+          text: elContentArray[i],
+          completed: elStatusArray[i],
+          id: i,
+        })
+      }
+      localStorage.setItem('todos', JSON.stringify(draggedArray));
+    })
+  }
+
   chooseFooter();
   addTodos(todoArray);
   createNewTodo();
   clearCompleted();
   filterTodos();
   changeMode();
+  dragNDrop();
 
 })
