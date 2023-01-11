@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       /* Актуальный массив после перемещения: */
       todoArray = JSON.parse(localStorage.getItem('todos'))
 
+      console.log(todo.id)
       todoArray = todoArray.filter(el => el.id !== todo.id);
       localStorage.setItem('todos', JSON.stringify(todoArray));
       item.remove();
@@ -180,22 +181,38 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function dragNDrop() {
+
+    function todoPosition(tTodo) {
+      let i = 0;
+      while (tTodo.previousElementSibling) {
+        tTodo = tTodo.previousElementSibling;
+        i++;
+      }
+      return i;
+    }
+    let dragStartPosition;
+    let dragEndPosition;
+
     const todoList = document.querySelector('.todo__list');
 
     todoList.addEventListener('dragstart', (event) => {
       event.target.classList.add('selected');
+      dragStartPosition = todoPosition(event.target);
     })
     todoList.addEventListener('dragend', (event) => {
       event.target.classList.remove('selected');
+      dragEndPosition = todoPosition(event.target);
+      [todoArray[dragStartPosition], todoArray[dragEndPosition]] = [todoArray[dragEndPosition], todoArray[dragStartPosition]];
+      localStorage.setItem('todos', JSON.stringify(todoArray));
     })
     /* Mobile: */
     todoList.addEventListener('touchstart', (event) => {
       event.target.classList.add('selected');
-      document.body.style.overflow = 'hidden';
+      // document.body.style.overflow = 'hidden';
     })
     todoList.addEventListener('touchend', (event) => {
       event.target.classList.remove('selected');
-      document.body.style.overflow = 'auto';
+      // document.body.style.overflow = 'auto';
     })
 
     const getNextTodo = (cursorPosition, currentTodo) => {
@@ -221,19 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       /* Вставить перемещаемое дело перед найденным сиблингом: */
       todoList.insertBefore(movableTodo, nextTodo);
-
-      /* Помещаю в локальное хранилище дела с измененным порядком: */
-      const elContentArray = Array.from(todoList.querySelectorAll('.todo__text')).map(el => el.innerHTML);
-      const elStatusArray = Array.from(event.target.parentNode.children).map(el => el.innerHTML.includes('completed'));
-      const draggedArray = [];
-      for (let i = 0; i < elContentArray.length; i++) {
-        draggedArray.push({
-          text: elContentArray[i],
-          completed: elStatusArray[i],
-          id: i + 1,
-        })
-      }
-      localStorage.setItem('todos', JSON.stringify(draggedArray));
     })
   }
 
