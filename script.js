@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     deleteItem.addEventListener('click', () => {
+      todoArray = JSON.parse(localStorage.getItem('todos'))
+
       todoArray = todoArray.filter(el => el.id !== todo.id);
       localStorage.setItem('todos', JSON.stringify(todoArray));
       item.remove();
@@ -64,10 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('keypress', function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
-        todoArray.push({ text: input.value, completed: false, id: getNewID(todoArray) });
-        localStorage.setItem('todos', JSON.stringify(todoArray));
-        input.value = '';
-        addTodos(todoArray);
+        if (input.value !== '') {
+          todoArray.push({ text: input.value, completed: false, id: getNewID(todoArray) });
+          localStorage.setItem('todos', JSON.stringify(todoArray));
+          input.value = '';
+          addTodos(todoArray);
+        }
       }
     })
   }
@@ -217,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         draggedArray.push({
           text: elContentArray[i],
           completed: elStatusArray[i],
-          id: i,
+          id: i + 1,
         })
       }
       localStorage.setItem('todos', JSON.stringify(draggedArray));
