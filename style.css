@@ -322,4 +322,8 @@ button {
     background-color: #25273C;
   }
 
+  .drag-and-drop {
+    display: none;
+  }
+
 }

@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     deleteItem.addEventListener('click', () => {
+      /* Актуальный массив после перемещения: */
       todoArray = JSON.parse(localStorage.getItem('todos'))
 
       todoArray = todoArray.filter(el => el.id !== todo.id);
@@ -184,9 +185,17 @@ document.addEventListener('DOMContentLoaded', () => {
     todoList.addEventListener('dragstart', (event) => {
       event.target.classList.add('selected');
     })
-
     todoList.addEventListener('dragend', (event) => {
       event.target.classList.remove('selected');
+    })
+    /* Mobile: */
+    todoList.addEventListener('touchstart', (event) => {
+      event.target.classList.add('selected');
+      document.body.style.overflow = 'hidden';
+    })
+    todoList.addEventListener('touchend', (event) => {
+      event.target.classList.remove('selected');
+      document.body.style.overflow = 'auto';
     })
 
     const getNextTodo = (cursorPosition, currentTodo) => {
