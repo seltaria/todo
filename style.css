@@ -226,13 +226,53 @@ button {
   text-decoration: line-through;
 }
 
-.todo__delete-item {
+.todo__text {
+  flex: 1;
+}
+
+.todo__edit-item {
   width: 14px;
   height: 14px;
   margin-left: auto;
+  background-image: url('./images/pen.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: opacity .2s ease-in-out;
+}
+
+.todo__edit-item.ok {
+  background-image: url('./images/ok.png');
+}
+
+.todo__edit-item:hover,
+.todo__delete-item:hover {
+  opacity: 0.7;
+}
+
+.todo__edit-input {
+  padding: 0;
+  width: 80%;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-normal);
+  font-family: 'Josefin Sans', sans-serif;
+  color: var(--light-grayish-blue-2);
+  border-bottom: 1px solid var(--light-grayish-blue-2);
+}
+
+.todo.light .todo__edit-input {
+  color: var(--very-dark-grayish-blue-2);
+}
+
+.todo__delete-item {
+  width: 14px;
+  height: 14px;
+  margin-left: 20px;
+  /* margin-left: auto; */
   background-image: url('./images/icon-cross.svg');
   background-repeat: no-repeat;
   background-position: center;
+  transition: opacity .2s ease-in-out;
 }
 
 .todo__footer {
@@ -308,6 +348,10 @@ button {
 
   .bg.light {
     background-image: url('./images/bg-mobile-light.jpg');
+  }
+
+  .todo__edit-input {
+    font-size: 14px;
   }
 
   .todo__footer-mobile {

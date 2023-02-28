@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const item = document.createElement('div');
     const itemButton = document.createElement('button');
     const itemText = document.createElement('div');
+    const editItem = document.createElement('button');
     const deleteItem = document.createElement('button');
     item.className = `todo__item`;
     item.draggable = true;
@@ -23,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     itemButton.className = `todo__check ${todo.completed && 'completed'}`;
     itemText.className = 'todo__text';
     itemText.textContent = todo.text;
+    editItem.className = 'todo__edit-item';
     deleteItem.className = 'todo__delete-item';
     list.append(item);
     item.append(itemButton);
     item.append(itemText);
+    item.append(editItem);
     item.append(deleteItem);
 
     itemButton.addEventListener('click', () => {
@@ -39,6 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       localStorage.setItem('todos', JSON.stringify(todoArray));
       itemsLeft.textContent = `${todoArray.filter(item => item.completed === false).length} items left`;
+    })
+
+    editItem.addEventListener('click', () => {
+      todoArray = JSON.parse(localStorage.getItem('todos'))
+      console.log(todo.id)
+      editItem.classList.toggle('ok');
+      itemText.textContent = '';
+      const editInput = document.createElement('input');
+      editInput.type = 'text';
+      editInput.value = todo.text;
+      editInput.className = 'todo__edit-input';
+      itemText.append(editInput);
+
+      editItem.addEventListener('click', () => {
+        if (!editItem.classList.contains('ok')) {
+          itemText.textContent = editInput.value;
+          editInput.remove();
+          todoArray = todoArray.map(el => el.id === todo.id ? { ...el, text: editInput.value } : el);
+          localStorage.setItem('todos', JSON.stringify(todoArray));
+        }
+      })
+
     })
 
     deleteItem.addEventListener('click', () => {
