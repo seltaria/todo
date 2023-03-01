@@ -205,6 +205,44 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  function changeImage() {
+    const bg = document.querySelector('.bg');
+    const appHeader = document.querySelector('.app__header');
+
+    const changeImageButton = document.createElement('button');
+    changeImageButton.className = 'change-image-button';
+    appHeader.prepend(changeImageButton);
+
+    const imageInput = document.createElement('input');
+    imageInput.type = 'text';
+    imageInput.placeholder = 'your new image';
+    imageInput.className = 'change-image-input';
+
+    const bgImage = JSON.parse(localStorage.getItem('bgImage'));
+    if (bgImage) {
+      bg.style.backgroundImage = `url('${bgImage}')`;
+    }
+
+    changeImageButton.addEventListener('click', () => {
+      changeImageButton.classList.toggle('ok');
+
+      if (!changeImageButton.classList.contains('ok')) {
+        if (imageInput.value === '') {
+          bg.style.removeProperty('background-image');
+          localStorage.removeItem('bgImage');
+        } else {
+          bg.style.backgroundImage = `url('${imageInput.value}')`;
+          localStorage.setItem('bgImage', JSON.stringify(imageInput.value));
+        }
+        imageInput.value = '';
+        imageInput.remove();
+      }
+      if (changeImageButton.classList.contains('ok')) {
+        appHeader.append(imageInput);
+      }
+    });
+  }
+
   function dragNDrop() {
 
     function todoPosition(tTodo) {
@@ -264,5 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   filterTodos();
   changeMode();
   dragNDrop();
+
+  changeImage();
 
 })

@@ -83,6 +83,7 @@ button {
   background-image: url("./images/bg-desktop-dark.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
   z-index: -1;
 }
 
@@ -322,6 +323,27 @@ button {
   margin-top: 20px;
   font-size: 12px;
   color: #4f5166;
+}
+
+.change-image-button {
+  position: absolute;
+  transform: translateY(-30px);
+  width: 20px;
+  height: 20px;
+  background-image: url('./images/landscape.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.change-image-input {
+  position: absolute;
+  color: rgb(118, 87, 131);
+  transform: translate(30px, -30px);
+  border-bottom: 1px solid #494C6B;
+}
+
+.change-image-input::placeholder {
+  color: rgb(118, 87, 131);
 }
 
 
