@@ -10,27 +10,45 @@ document.addEventListener('DOMContentLoaded', () => {
     return max + 1
   }
 
-  function newTodo(todo) {
+  const list = document.querySelector('.todo__list');
+
+  function newTodo(todo, container) {
     const itemsLeft = document.querySelector('.todo__footer-left');
-    const list = document.querySelector('.todo__list');
     const item = document.createElement('div');
     const itemButton = document.createElement('button');
     const itemText = document.createElement('div');
+    const addSubItem = document.createElement('button');
     const editItem = document.createElement('button');
     const deleteItem = document.createElement('button');
     item.className = `todo__item`;
+    item.dataset.id = todo.id;
     item.draggable = true;
     if (JSON.parse(localStorage.getItem('mode')) === 'light') { item.classList.add('light') };
     itemButton.className = `todo__check ${todo.completed && 'completed'}`;
     itemText.className = 'todo__text';
     itemText.textContent = todo.text;
+    addSubItem.className = 'todo__add-sub-item';
+    addSubItem.title = 'Add sub-todo';
     editItem.className = 'todo__edit-item';
+    editItem.title = 'Edit todo';
     deleteItem.className = 'todo__delete-item';
-    list.append(item);
+    deleteItem.title = 'Delete todo';
+
+    if (container === list) { container.append(item) } else {
+      container.parentElement.after(item);
+      item.classList.add('sub-item');
+    }
+
     item.append(itemButton);
     item.append(itemText);
+    item.append(addSubItem);
     item.append(editItem);
     item.append(deleteItem);
+
+    if (todo.level === 'sub') {
+      item.classList.add('sub-item');
+      addSubItem.remove();
+    }
 
     itemButton.addEventListener('click', () => {
       itemButton.classList.toggle('completed');
@@ -76,6 +94,41 @@ document.addEventListener('DOMContentLoaded', () => {
       item.remove();
       itemsLeft.textContent = `${todoArray.filter(item => item.completed === false).length} items left`;
     })
+
+    addSubItem.addEventListener('click', () => {
+      todoArray = JSON.parse(localStorage.getItem('todos'))
+      // Плюсик становится галочкой
+      addSubItem.classList.toggle('ok');
+      // Появляется инпут
+      const subItemInput = document.createElement('input');
+      if (addSubItem.classList.contains('ok')) {
+        subItemInput.type = 'text';
+        subItemInput.placeholder = 'Your new sub-todo';
+        subItemInput.className = 'sub-item-input';
+        item.append(subItemInput);
+      }
+
+      // Нажатие на галочку
+      addSubItem.addEventListener('click', (event) => {
+        if (!addSubItem.classList.contains('ok')) {
+          if (subItemInput.value !== '') {
+            // Добавляется новая строка с текстом - данными из инпута
+            newTodo({ text: subItemInput.value, completed: false, id: getNewID(todoArray), level: 'sub' }, addSubItem);
+            // Добавить в todoArray
+            console.log(event.target.parentElement.dataset.id)
+            for (let i = 0; i < todoArray.length; i++) {
+              if (todoArray[i].id == event.target.parentElement.dataset.id) {
+                todoArray.splice(i + 1, 0, { text: subItemInput.value, completed: false, id: getNewID(todoArray), level: 'sub' });
+                break;
+              }
+            }
+            localStorage.setItem('todos', JSON.stringify(todoArray));
+          }
+          subItemInput.value = '';
+          subItemInput.remove();
+        }
+      })
+    })
   }
 
   function addTodos(array) {
@@ -83,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = document.querySelector('.todo__list');
     list.innerHTML = '';
 
-    array.forEach(el => newTodo(el));
+    array.forEach(el => newTodo(el, list));
     itemsLeft.textContent = `${array.filter(item => item.completed === false).length} items left`;
   }
 
@@ -211,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const changeImageButton = document.createElement('button');
     changeImageButton.className = 'change-image-button';
+    changeImageButton.title = 'Change image';
     appHeader.prepend(changeImageButton);
 
     const imageInput = document.createElement('input');
