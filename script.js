@@ -119,6 +119,7 @@ function newTodo(todo, container) {
     editInput.className = 'todo__edit-input';
     itemText.append(editInput);
     editInput.focus();
+    item.draggable = false;
 
     function renameTodo() {
       if (editInput.value !== '') {
@@ -136,6 +137,7 @@ function newTodo(todo, container) {
           }
         })
         localStorage.setItem('todoFolders', JSON.stringify(todoArray));
+        item.draggable = true;
       }
     }
     // Rename clicking on the button:
@@ -447,8 +449,15 @@ function dragNDrop() {
   todoList.addEventListener('dragend', (event) => {
     event.target.classList.remove('selected');
     dragEndPosition = todoPosition(event.target);
-    [todoArray[dragStartPosition], todoArray[dragEndPosition]] = [todoArray[dragEndPosition], todoArray[dragStartPosition]];
-    localStorage.setItem('todos', JSON.stringify(todoArray));
+
+    todoArray = JSON.parse(localStorage.getItem('todoFolders'));
+    let activeFolderTodos = todoArray.filter(folder => folder.active)[0].todos;
+
+    activeFolderTodos[dragStartPosition] = [activeFolderTodos[dragEndPosition], activeFolderTodos[dragEndPosition] = activeFolderTodos[dragStartPosition]][0]
+    // Move children below their parent:
+    // const movingChildren = activeFolderTodos.filter(todo => Number(todo.parentId) === Number(activeFolderTodos[dragEndPosition].id));
+
+    localStorage.setItem('todoFolders', JSON.stringify(todoArray));
   })
 
   const getNextTodo = (cursorPosition, currentTodo) => {
@@ -460,19 +469,19 @@ function dragNDrop() {
 
   todoList.addEventListener('dragover', (event) => {
     event.preventDefault();
-    /* Перемещаемое дело: */
+    // Moving item:
     const movableTodo = todoList.querySelector('.selected');
-    /* Над каким делом курсор: */
+    // Cursor is over the event.target:
     const currentTodo = event.target;
-    /* Если событие сработало не на перемещаемом деле и на элементе списка дел: */
+    // If event is not on the moving item or todo list element:
     const isMovable = movableTodo !== currentTodo && currentTodo.classList.contains('todo__item');
     if (!isMovable) { return }
-    /* Дело, перед которым будет вставлено перемещенное дело: */
+    // Moving item inserts above nextTodo:
     const nextTodo = getNextTodo(event.clientY, currentTodo);
     if (nextTodo && movableTodo === nextTodo.previousElementSibling || movableTodo === nextTodo) {
       return
     }
-    /* Вставить перемещаемое дело перед найденным сиблингом: */
+    // Insert moving item before movableTodo:
     todoList.insertBefore(movableTodo, nextTodo);
   })
 }
@@ -483,7 +492,7 @@ createNewTodo();
 clearCompleted();
 filterTodos();
 changeMode();
-// dragNDrop();
+dragNDrop();
 
 changeImage();
 
@@ -501,18 +510,12 @@ createFolderButton.addEventListener('click', () => {
     dataArray = [];
   }
   let maxId = Math.max(...dataArray.map(folder => folder.id));
-  // Add an empty object to localStorage
+  // Add an empty object to localStorage:
   if (dataArray.length === 0) {
     maxId = 0;
     dataArray.push({ 'id': Number(maxId) + 1, 'name': 'New Folder', 'active': true, 'todos': [] });
     createFolder(maxId, true);
   } else {
-    // If more than 3 folders:
-    // if (dataArray.length === 3) {
-    // Add new button to show other folders:
-    // const showFoldersButton = document.querySelector('#show-folders');
-    // showFoldersButton.style.display = 'block';
-    // }
     dataArray.push({ 'id': Number(maxId) + 1, 'name': 'New Folder', 'active': false, 'todos': [] });
     createFolder(maxId, false);
   }

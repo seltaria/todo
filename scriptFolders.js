@@ -74,10 +74,6 @@ export function addFolders() {
     maxId = 0;
   }
   if (dataArray) {
-    // if (dataArray.length > 3) {
-    //   const showFoldersButton = document.querySelector('#show-folders');
-    //   showFoldersButton.style.display = 'block';
-    // }
     for (let el of dataArray) { createFolder(maxId, el.active, el.name, el.id) }
   }
 }
