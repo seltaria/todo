@@ -211,7 +211,7 @@ export function importFolder() {
         let dataArray = JSON.parse(localStorage.getItem('todoFolders'));
 
         let maxFolderId;
-        if (dataArray.length !== 0) {
+        if (dataArray && dataArray.length !== 0) {
           maxFolderId = Math.max(...dataArray.map(folder => folder.id));
         } else {
           dataArray = [];
