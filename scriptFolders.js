@@ -155,8 +155,10 @@ export function chooseFolder() {
     shareFolderButton.addEventListener('click', (event) => {
       let dataArray = JSON.parse(localStorage.getItem('todoFolders'));
       const todos = dataArray.filter(folder => folder.id === Number(event.target.closest('.folder').dataset.id))[0].todos;
+      // Name the file as shared folder:
+      const folderName = event.target.closest('.folder').childNodes[0].textContent;
+      shareFolder(`${folderName}.txt`, JSON.stringify(todos));
       deleteFolderMenu();
-      shareFolder("todos.txt", JSON.stringify(todos));
     })
   })
 }
@@ -209,16 +211,17 @@ export function importFolder() {
         let dataArray = JSON.parse(localStorage.getItem('todoFolders'));
 
         let maxFolderId;
-        if (dataArray) {
+        if (dataArray.length !== 0) {
           maxFolderId = Math.max(...dataArray.map(folder => folder.id));
         } else {
           dataArray = [];
           maxFolderId = 0;
         }
-        createFolder(maxFolderId, false, 'Imported', maxFolderId + 1);
+        const folderName = file.name.split('.')[0];
+        createFolder(maxFolderId, false, folderName, maxFolderId + 1);
 
         dataArray.push({
-          id: maxFolderId + 1, name: 'Imported', active: false, todos: importTodos
+          id: maxFolderId + 1, name: folderName, active: false, todos: importTodos
         })
 
         localStorage.setItem('todoFolders', JSON.stringify(dataArray));
