@@ -4,6 +4,8 @@
 ⭐️ Create, edit and move todos <br>
 ⭐️ Filter completed and not completed todos <br>
 ⭐️ Create steps for each todo <br>
+⭐️ Move todos <br>
+⭐️ Share your todos and import them <br>
 ⭐️ Choose an image that you want <br>
 ⭐️ Choose dark or light mode <br><br>
 
