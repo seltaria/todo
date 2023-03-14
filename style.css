@@ -197,6 +197,9 @@ ul {
   background-color: rgba(56, 50, 61, 0.484);
   opacity: 0.6;
 }
+.todo__item.selected-sub {
+  opacity: 0.5;
+}
 
 .todo.light .todo__item.selected {
   background: linear-gradient(90deg, hsla(192, 100%, 67%, 0.585), hsla(280, 87%, 65%, 0.442));
@@ -473,6 +476,10 @@ ul {
   border-bottom: 1px solid var(--light-grayish-blue-1);
 }
 
+#add-folder {
+  position: relative;
+}
+
 #show-folders {
   display: none;
 }
@@ -529,6 +536,17 @@ ul {
 
 .todo.light .folder.active {
   color: black;
+}
+
+.import-label {
+  cursor: pointer;
+}
+
+#input-file {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  /* pointer-events: none; */
 }
 
 

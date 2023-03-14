@@ -122,25 +122,26 @@ export function chooseFolder() {
           foldersList.classList.add('empty');
         } else {
           // If delete the first folder set 'active' to the second one:
-          if (event.target.closest('.folder') === event.target.closest('.folder').parentElement.children[0]) {
-            event.target.closest('.folder').parentElement.children[1].classList.add('active');
+          const folderParent = event.target.closest('.folder').parentElement;
+          if (event.target.closest('.folder') === folderParent.children[0]) {
+            folderParent.children[1].classList.add('active');
             for (let obj of dataArray) {
-              if (obj.id === Number(event.target.closest('.folder').parentElement.children[1].dataset.id)) {
+              if (obj.id === Number(folderParent.children[1].dataset.id)) {
                 addTodos(obj.todos);
               }
             }
           } else {
-            event.target.closest('.folder').parentElement.children[0].classList.add('active');
+            folderParent.children[0].classList.add('active');
             for (let obj of dataArray) {
-              if (obj.id === Number(event.target.closest('.folder').parentElement.children[0].dataset.id)) {
+              if (obj.id === Number(folderParent.children[0].dataset.id)) {
                 addTodos(obj.todos);
               }
             }
             // First folder is active:
-            dataArray = dataArray.map(folder => folder.id === Number(event.target.closest('.folder').parentElement.children[0].dataset.id) ? { ...folder, active: true } : folder);
+            dataArray = dataArray.map(folder => folder.id === Number(folderParent.children[0].dataset.id) ? { ...folder, active: true } : folder);
           }
           // Second folder is active:
-          dataArray = dataArray.map(folder => folder.id === Number(event.target.closest('.folder').parentElement.children[1].dataset.id) ? { ...folder, active: true } : folder);
+          dataArray = dataArray.map(folder => folder.id === Number(folderParent.children[1].dataset.id) ? { ...folder, active: true } : folder);
         }
       }
       event.target.closest('.folder').remove();
@@ -191,4 +192,62 @@ function shareFolder(filename, text) {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+}
+
+export function importFolder() {
+  const addFolderButton = document.querySelector('#add-folder');
+  addFolderButton.addEventListener('contextmenu', (event) => {
+    deleteFolderMenu();
+    event.preventDefault();
+    const importInput = createAddFolderMenu(event.target, event.offsetX, event.offsetY);
+    importInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        // Add new folder with todos:
+        const importTodos = JSON.parse(reader.result);
+        let dataArray = JSON.parse(localStorage.getItem('todoFolders'));
+
+        let maxFolderId;
+        if (dataArray) {
+          maxFolderId = Math.max(...dataArray.map(folder => folder.id));
+        } else {
+          dataArray = [];
+          maxFolderId = 0;
+        }
+        createFolder(maxFolderId, false, 'Imported', maxFolderId + 1);
+
+        dataArray.push({
+          id: maxFolderId + 1, name: 'Imported', active: false, todos: importTodos
+        })
+
+        localStorage.setItem('todoFolders', JSON.stringify(dataArray));
+      })
+      reader.readAsText(file);
+    })
+  })
+}
+
+function createAddFolderMenu(container, coordX, coordY) {
+  const folderMenu = document.createElement('div');
+  const importFolder = document.createElement('label');
+  const importInput = document.createElement('input');
+  folderMenu.className = 'folder-menu';
+  importFolder.setAttribute('for', 'input-file');
+  importFolder.className = 'import-label';
+  importFolder.textContent = '📁 Import';
+  importInput.type = 'file';
+  importInput.name = 'file';
+  importInput.id = 'input-file';
+  folderMenu.style.top = `${coordY}px`;
+  folderMenu.style.left = `${coordX}px`;
+  container.append(folderMenu);
+  folderMenu.append(importFolder);
+  folderMenu.append(importInput);
+
+  importFolder.addEventListener('click', () => {
+    importInput.click();
+  })
+
+  return importInput;
 }
