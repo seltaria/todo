@@ -15,4 +15,3 @@
 
 This page is available on [GitHub Pages](https://seltaria.github.io/todo). <br/>
 
-Here's the [link](https://www.frontendmentor.io/challenges/todo-app-Su1_KokOW) on this Frontend Mentor challenge.
