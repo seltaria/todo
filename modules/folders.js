@@ -1,4 +1,5 @@
-import { addTodos, filterTodos } from "./script.js";
+import { addTodos } from "../script.js";
+import { filterTodos } from "./filterTodos.js";
 
 const foldersContainer = document.querySelector('.folders');
 
@@ -111,7 +112,7 @@ export function chooseFolder() {
     }
     createFolderMenu(event.target, event.offsetX, event.offsetY);
     dataArray = JSON.parse(localStorage.getItem('todoFolders'));
-    // Delete folder:
+    // FIXME: Delete folder:
     const deleteFolderButton = document.querySelector('.folder-item-delete');
     deleteFolderButton.addEventListener('click', (event) => {
       // If delete active folder set 'active' to the first folder:
@@ -148,6 +149,7 @@ export function chooseFolder() {
       deleteFolderMenu();
       // Delete folder from localStorage:
       dataArray = dataArray.filter(todo => todo.id !== Number(event.target.closest('.folder').dataset.id));
+      console.log(dataArray)
       localStorage.setItem('todoFolders', JSON.stringify(dataArray));
     })
     // Share folder:
@@ -253,4 +255,36 @@ function createAddFolderMenu(container, coordX, coordY) {
   })
 
   return importInput;
+}
+
+export function folders() {
+  createFolderList();
+  addFolders();
+  chooseFolder();
+  importFolder();
+
+  const createFolderButton = document.querySelector('#add-folder');
+  createFolderButton.addEventListener('click', (event) => {
+    if (event.target.classList.contains('import-label') || event.target.id === 'input-file') { return };
+    let dataArray = JSON.parse(localStorage.getItem('todoFolders'));
+    if (!dataArray) {
+      localStorage.setItem('todoFolders', JSON.stringify([]));
+      dataArray = [];
+    }
+    let maxId = Math.max(...dataArray.map(folder => folder.id));
+    // Add an empty object to localStorage:
+    if (dataArray.length === 0) {
+      maxId = 0;
+      dataArray.push({ 'id': Number(maxId) + 1, 'name': 'New Folder', 'active': true, 'todos': [] });
+      createFolder(maxId, true);
+    } else {
+      dataArray.push({ 'id': Number(maxId) + 1, 'name': 'New Folder', 'active': false, 'todos': [] });
+      createFolder(maxId, false);
+    }
+    localStorage.setItem('todoFolders', JSON.stringify(dataArray));
+  })
+
+  window.addEventListener('click', () => {
+    deleteFolderMenu();
+  })
 }

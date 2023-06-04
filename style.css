@@ -296,7 +296,6 @@ ul {
   width: 14px;
   height: 14px;
   margin-left: 20px;
-  /* margin-left: auto; */
   background-image: url('./images/icon-cross.svg');
   background-repeat: no-repeat;
   background-position: center;
@@ -546,7 +545,6 @@ ul {
   position: absolute;
   opacity: 0;
   visibility: hidden;
-  /* pointer-events: none; */
 }
 
 
